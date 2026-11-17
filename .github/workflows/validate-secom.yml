@@ -1,0 +1,61 @@
+name: Validate FabPulse with UCI SECOM
+
+on:
+  push:
+    branches: [fabpulse-secom]
+    paths:
+      - ".github/workflows/validate-secom.yml"
+      - "train.py"
+      - "src/**"
+      - "requirements.txt"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-secom:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install requirements
+        run: python -m pip install -r requirements.txt
+      - name: Download authentic SECOM inputs
+        shell: bash
+        run: |
+          mkdir -p data/raw
+          python - <<'PY'
+          import hashlib, urllib.request
+          from pathlib import Path
+          base = "https://archive.ics.uci.edu/ml/machine-learning-databases/secom/"
+          for fn in ("secom.data", "secom_labels.data", "secom.names"):
+              with urllib.request.urlopen(base + fn, timeout=90) as f:
+                  data = f.read()
+              Path("data/raw",fn).write_bytes(data)
+              print(f"UCI: {fn} bytes={len(data)} sha256={hashlib.sha256(data).hexdigest()}",flush=True)
+          PY
+      - name: Train and evaluate held-out data
+        run: python train.py --raw-dir data/raw --out-dir artifacts
+      - name: Print actual evaluation
+        run: |
+          python - <<'PY'
+          import json
+          d=json.load(open("artifacts/metrics.json"))
+          for k in ("features","total_samples","total_failures","missing_fraction","model_name","validation_results","test_metrics"):
+              print(k, d[k])
+          PY
+      - name: Upload analysis outputs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: secom-validation
+          path: |
+            artifacts/metrics.json
+            artifacts/feature_importance.csv
+            artifacts/test_predictions.csv
+          if-no-files-found: warn
