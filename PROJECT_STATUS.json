@@ -1,0 +1,8 @@
+{
+  "source_code_created": true,
+  "offline_synthetic_integration_test_passed": true,
+  "real_uci_secom_data_downloaded": false,
+  "real_uci_secom_model_trained": false,
+  "streamlit_live_ui_tested": false,
+  "notes": "No network/DNS access to archive.ics.uci.edu in build environment. No actual semiconductor model performance claimed. Run official download and training on a network-enabled computer."
+}
