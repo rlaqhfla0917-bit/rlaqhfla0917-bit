@@ -1,8 +1,19 @@
 {
   "source_code_created": true,
   "offline_synthetic_integration_test_passed": true,
-  "real_uci_secom_data_downloaded": false,
-  "real_uci_secom_model_trained": false,
+  "real_uci_secom_data_downloaded": true,
+  "real_uci_secom_model_trained": true,
   "streamlit_live_ui_tested": false,
-  "notes": "No network/DNS access to archive.ics.uci.edu in build environment. No actual semiconductor model performance claimed. Run official download and training on a network-enabled computer."
+  "notes": "Actual SECOM evaluation completed on GitHub Actions. Retrospective screening only; 3/17 failures captured among top 32/314 review candidates. Not validated for deployment. Streamlit live UI not yet tested.",
+  "original_dataset_sha256_verified": true,
+  "real_dataset_validation_passed": true,
+  "validation_run_url": "https://github.com/rlaqhfla0917-bit/rlaqhfla0917-bit/actions/runs/44012267006",
+  "validation_date": "2026-11-17",
+  "test_samples": 314,
+  "test_failures": 17,
+  "selected_model": "Random Forest",
+  "test_recall_at_top10": 0.17647058823529413,
+  "test_lift_at_top10": 1.7316176470588234,
+  "test_average_precision": 0.09617807357703434,
+  "test_roc_auc": 0.6850861556743909
 }
