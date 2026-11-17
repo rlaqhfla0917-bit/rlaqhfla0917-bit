@@ -26,6 +26,9 @@ def load_secom(raw_dir: str | Path = "data/raw") -> tuple[pd.DataFrame, pd.Serie
         raise ValueError("Unexpected label format: expected label, date, and time tokens")
     if len(x) != len(labels):
         raise ValueError(f"Row mismatch: {len(x)} feature rows and {len(labels)} labels")
+    # Official UCI labels contain a quoted date/time string; strip quotes after splitting.
+    labels["date"] = labels["date"].astype(str).str.strip('"')
+    labels["time"] = labels["time"].astype(str).str.strip('"')
     labels["label"] = pd.to_numeric(labels["label"], errors="raise")
     if not set(labels["label"].dropna().unique()).issubset({-1, 1}):
         raise ValueError("UCI labels must be -1 (pass) or 1 (fail)")
