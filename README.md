@@ -1,8 +1,18 @@
 # FabPulse — 반도체 제조공정 불량 위험 분류 및 점검 우선순위 지원
 
-> **상태:** 구현된 분석 코드 + Streamlit UI / 공식 SECOM 데이터 다운로드·실제 학습은 실행 환경에 따라 별도 수행  
+> **상태:** 공식 UCI SECOM 원본 실측 데이터로 학습·홀드아웃 평가 완료 (GitHub Actions, 2026-11-17) / Streamlit 실서비스 운영은 미검증  
 > **용도:** SK하이닉스 Fab Operation Engineering 관련 기술 포트폴리오의 재현 가능한 연구용 프로토타입  
 > **중요:** SK하이닉스와 무관한 공개 데이터셋을 사용하며, 현장 운영에 연결된 상용 시스템이 아닙니다.
+
+## 실제 데이터 검증 결과 (2026-11-17)
+
+GitHub Actions에서 **공식 UCI 원본 파일 SHA256를 확인**하고 실제 1,567건의 제조 데이터로 학습 및 독립 테스트를 완료했습니다.
+
+- 시간순 홀드아웃 **314건(불량 17건)**, 선택 모델 **Random Forest**
+- 위험도 상위 **32건(약 10%)** 중 **불량 3건** 선별: **Recall@Top10% 17.65%, Lift@Top10% 1.73배**
+- **Average Precision 0.0962**, **ROC-AUC 0.6851**
+- 실제 불량 중 14건은 포착하지 못했으며, 이 결과는 배포 가능한 성능이나 불량 예방 효과를 입증하지 않습니다.
+- 상세 결과: [검증 보고서](reports/REAL_SECOM_VALIDATION_2026-11-17.md) · [GitHub Actions 실행 로그](https://github.com/rlaqhfla0917-bit/rlaqhfla0917-bit/actions/runs/44012267006)
 
 ## 문제정의
 
